@@ -114,6 +114,72 @@ def listar_partidas():
         cursor.close()
         conexion.close()
 
+#===================funcion Delete==================        
+def eliminar_perfil():
+    conexion = conectar()
+    cursor = conexion.cursor()
+
+    print("\n=== ELIMINAR PERFIL DE JUGADOR ===")
+    id_jugador = input("Ingrese el ID del jugador que desea eliminar: ")
+
+    # Verificar si el jugador existe
+    cursor.execute("SELECT * FROM jugadores WHERE id_jugador = %s", (id_jugador,))
+    jugador = cursor.fetchone()
+
+    if not jugador:
+        print("No se encontró un jugador con ese ID.")
+        cursor.close()
+        conexion.close()
+        return
+
+    print(f"Jugador encontrado: ID: {jugador[0]}, Nombre: {jugador[1]}, Raza: {jugador[2]}, Nivel: {jugador[3]}")
+    confirmacion = input("¿Está seguro que desea eliminar este perfil? (S/N): ").strip().upper()
+
+    if confirmacion == "S":
+        try:
+            cursor.execute("DELETE FROM jugadores WHERE id_jugador = %s", (id_jugador,))
+            conexion.commit()
+            print("Perfil eliminado exitosamente.")
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+    else:
+        print("Eliminación cancelada.")
+
+    cursor.close()
+    conexion.close()
+
+def eliminar_partida():
+    conexion = conectar()
+    cursor = conexion.cursor()
+
+    print("\n=== ELIMINAR PARTIDA ===")
+    id_partida = input("Ingrese el ID de la partida que desea eliminar: ")
+
+    # Verificar si la partida existe
+    cursor.execute("SELECT * FROM partidas WHERE id_partida = %s", (id_partida,))
+    partida = cursor.fetchone()
+
+    if not partida:
+        print("No se encontró una partida con ese ID.")
+        cursor.close()
+        conexion.close()
+        return
+
+    print(f"Partida encontrada: ID: {partida[0]}, Tipo: {partida[1]}, Jugadores: {partida[2]}, Mapa: {partida[3]}")
+    confirmacion = input("¿Está seguro que desea eliminar esta partida? (S/N): ").strip().upper()
+
+    if confirmacion == "S":
+        try:
+            cursor.execute("DELETE FROM partidas WHERE id_partida = %s", (id_partida,))
+            conexion.commit()
+            print("Partida eliminada exitosamente.")
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+    else:
+        print("Eliminación cancelada.")
+
+    cursor.close()
+    conexion.close()
 
 
 # ====================Menú principal==================
@@ -139,6 +205,14 @@ def menu_principal():
             listar_perfiles()
         elif opcion == "4":
             listar_partidas()
+        elif opcion == "5":
+            actualizar_perfil()
+        elif opcion == "6":
+            actualizar_partida()
+        elif opcion == "7":
+            eliminar_perfil()
+        elif opcion == "8":
+            eliminar_partida()
         elif opcion == "9":
             print("Saliendo del sistema...")
             break
