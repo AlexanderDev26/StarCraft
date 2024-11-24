@@ -182,7 +182,7 @@ def eliminar_partida():
     conexion.close()
 
 
-# ====================Menú principal==================
+# ====================Menú principal================
 def menu_principal():
     while True:
         print("\n=== STARCRAFT MANAGEMENT SYSTEM ===")
