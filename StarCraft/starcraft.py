@@ -51,7 +51,7 @@ def crear_partida():
         cursor.close()
         conexion.close()
         
-#--------------------------funcion Read--------------------------------        
+#--------------------------funcion Read--------------------------------prueba de ariel     
 def listar_perfiles():
     conexion = conectar()
     cursor = conexion.cursor()
