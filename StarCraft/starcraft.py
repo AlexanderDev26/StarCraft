@@ -148,6 +148,38 @@ def eliminar_perfil():
     cursor.close()
     conexion.close()
 
+def eliminar_partida():
+    conexion = conectar()
+    cursor = conexion.cursor()
+
+    print("\n=== ELIMINAR PARTIDA ===")
+    id_partida = input("Ingrese el ID de la partida que desea eliminar: ")
+
+    # Verificar si la partida existe
+    cursor.execute("SELECT * FROM partidas WHERE id_partida = %s", (id_partida,))
+    partida = cursor.fetchone()
+
+    if not partida:
+        print("No se encontró una partida con ese ID.")
+        cursor.close()
+        conexion.close()
+        return
+
+    print(f"Partida encontrada: ID: {partida[0]}, Tipo: {partida[1]}, Jugadores: {partida[2]}, Mapa: {partida[3]}")
+    confirmacion = input("¿Está seguro que desea eliminar esta partida? (S/N): ").strip().upper()
+
+    if confirmacion == "S":
+        try:
+            cursor.execute("DELETE FROM partidas WHERE id_partida = %s", (id_partida,))
+            conexion.commit()
+            print("Partida eliminada exitosamente.")
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+    else:
+        print("Eliminación cancelada.")
+
+    cursor.close()
+    conexion.close()
 
 
 
